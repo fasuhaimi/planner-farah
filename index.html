@@ -4,10 +4,142 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wedding Planner - Farah & Basyir</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #fdf7f7;
+        color: #5c4b51;
+        padding: 20px;
+        max-width: 1100px;
+        margin: auto;
+    }
 
-<link rel="stylesheet" href="style.css">
+    h1, h2 {
+        color: #9c6b7b;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background: #fffaf9;
+        border: 1px solid #f0d9df;
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #f1e2e6;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    th {
+        background: #f9e8ed;
+        color: #7b5563;
+    }
+
+    .done {
+        background: #e9f7ef;
+    }
+
+    .progress-bar {
+        height: 26px;
+        background: #f1dbe2;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #c9899c;
+        width: 0%;
+        color: white;
+        text-align: center;
+        line-height: 26px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    button {
+        padding: 8px 14px;
+        border: none;
+        background: #c9899c;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-right: 5px;
+        margin-top: 8px;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    .btn-edit {
+        background: #8c7aa9;
+    }
+
+    .btn-delete {
+        background: #d16d6d;
+    }
+
+    .btn-small {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    input[type="text"], input[type="number"], input[type="time"], select, textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #e6cfd6;
+        border-radius: 8px;
+        background: #fff;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 70px;
+    }
+
+    .summary-box {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .summary-item {
+        background: #fff;
+        border: 1px solid #f0d9df;
+        border-radius: 12px;
+        padding: 14px;
+        font-weight: bold;
+    }
+
+    .section-note {
+        color: #8c6f78;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+</style>
 </head>
-
 <body>
 
 <h1>💍 Farah & Basyir Wedding Planner</h1>
@@ -73,6 +205,7 @@
 
 <div class="card">
     <h2>👨‍👩‍👧 Guest List</h2>
+    <div class="section-note">Boleh guna side untuk asingkan belah perempuan / lelaki / bride / groom.</div>
     <table id="guestTable">
         <tr>
             <th>Name</th>
@@ -91,8 +224,372 @@
     </div>
 </div>
 
+<div class="card">
+    <h2>🕒 Wedding Timeline</h2>
+    <table id="timelineTable">
+        <tr>
+            <th>Time</th>
+            <th>Activity</th>
+            <th>Notes</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <button onclick="addTimeline()">Add Timeline</button>
+</div>
+
+<div class="card">
+    <h2>📞 Vendor List</h2>
+    <table id="vendorTable">
+        <tr>
+            <th>Vendor</th>
+            <th>Category</th>
+            <th>Contact</th>
+            <th>Notes</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <button onclick="addVendor()">Add Vendor</button>
+</div>
+
 <script>
-// (JS sama — tak perlu ubah apa-apa dari code you)
+let tasks = JSON.parse(localStorage.getItem("weddingTasks")) || [
+    { text: "Confirm date", done: false },
+    { text: "Book pelamin", done: false },
+    { text: "Book MUA", done: false },
+    { text: "Borang Nikah", done: false },
+    { text: "Kursus kahwin", done: false },
+    { text: "Kad jemputan", done: false },
+    { text: "Prepare doorgift", done: false },
+    { text: "Mas kahwin", done: false }
+];
+
+let guests = JSON.parse(localStorage.getItem("weddingGuests")) || [];
+let timelines = JSON.parse(localStorage.getItem("weddingTimelines")) || [
+    { time: "10:00", activity: "Guest arrival", notes: "" },
+    { time: "11:00", activity: "Bride & groom arrival", notes: "" },
+    { time: "12:00", activity: "Makan beradab", notes: "" }
+];
+let vendors = JSON.parse(localStorage.getItem("weddingVendors")) || [];
+
+function saveTasks() {
+    localStorage.setItem("weddingTasks", JSON.stringify(tasks));
+}
+
+function saveGuests() {
+    localStorage.setItem("weddingGuests", JSON.stringify(guests));
+}
+
+function saveTimelines() {
+    localStorage.setItem("weddingTimelines", JSON.stringify(timelines));
+}
+
+function saveVendors() {
+    localStorage.setItem("weddingVendors", JSON.stringify(vendors));
+}
+
+function saveBudget() {
+    const budgetData = {
+        budgetPelamin: document.getElementById("budgetPelamin").value,
+        actualPelamin: document.getElementById("actualPelamin").value,
+        budgetCatering: document.getElementById("budgetCatering").value,
+        actualCatering: document.getElementById("actualCatering").value,
+        budgetMUA: document.getElementById("budgetMUA").value,
+        actualMUA: document.getElementById("actualMUA").value,
+        budgetDoorgift: document.getElementById("budgetDoorgift").value,
+        actualDoorgift: document.getElementById("actualDoorgift").value,
+        budgetPhoto: document.getElementById("budgetPhoto").value,
+        actualPhoto: document.getElementById("actualPhoto").value
+    };
+    localStorage.setItem("weddingBudget", JSON.stringify(budgetData));
+}
+
+function loadBudget() {
+    const budgetData = JSON.parse(localStorage.getItem("weddingBudget")) || {};
+    document.getElementById("budgetPelamin").value = budgetData.budgetPelamin || "";
+    document.getElementById("actualPelamin").value = budgetData.actualPelamin || "";
+    document.getElementById("budgetCatering").value = budgetData.budgetCatering || "";
+    document.getElementById("actualCatering").value = budgetData.actualCatering || "";
+    document.getElementById("budgetMUA").value = budgetData.budgetMUA || "";
+    document.getElementById("actualMUA").value = budgetData.actualMUA || "";
+    document.getElementById("budgetDoorgift").value = budgetData.budgetDoorgift || "";
+    document.getElementById("actualDoorgift").value = budgetData.actualDoorgift || "";
+    document.getElementById("budgetPhoto").value = budgetData.budgetPhoto || "";
+    document.getElementById("actualPhoto").value = budgetData.actualPhoto || "";
+}
+
+function numVal(id) {
+    return parseFloat(document.getElementById(id).value) || 0;
+}
+
+function updateBudgetSummary() {
+    const totalBudget =
+        numVal("budgetPelamin") +
+        numVal("budgetCatering") +
+        numVal("budgetMUA") +
+        numVal("budgetDoorgift") +
+        numVal("budgetPhoto");
+
+    const totalActual =
+        numVal("actualPelamin") +
+        numVal("actualCatering") +
+        numVal("actualMUA") +
+        numVal("actualDoorgift") +
+        numVal("actualPhoto");
+
+    const diff = totalBudget - totalActual;
+
+    document.getElementById("totalBudget").innerText = "RM " + totalBudget.toLocaleString();
+    document.getElementById("totalActual").innerText = "RM " + totalActual.toLocaleString();
+    document.getElementById("budgetDiff").innerText = "RM " + diff.toLocaleString();
+}
+
+function renderTasks() {
+    const table = document.getElementById("checklist");
+    table.innerHTML = `
+        <tr>
+            <th>Done</th>
+            <th>Task</th>
+            <th>Action</th>
+        </tr>
+    `;
+
+    tasks.forEach((task, index) => {
+        const row = table.insertRow();
+        if (task.done) row.classList.add("done");
+
+        row.innerHTML = `
+            <td><input type="checkbox" ${task.done ? "checked" : ""} onchange="toggleTask(${index})"></td>
+            <td>${task.text}</td>
+            <td>
+                <button class="btn-edit btn-small" onclick="editTask(${index})">Edit</button>
+                <button class="btn-delete btn-small" onclick="deleteTask(${index})">Delete</button>
+            </td>
+        `;
+    });
+
+    updateProgress();
+}
+
+function addTask() {
+    let task = prompt("Enter new task:");
+    if (task && task.trim() !== "") {
+        tasks.push({ text: task.trim(), done: false });
+        saveTasks();
+        renderTasks();
+    }
+}
+
+function editTask(index) {
+    let newTask = prompt("Edit task:", tasks[index].text);
+    if (newTask && newTask.trim() !== "") {
+        tasks[index].text = newTask.trim();
+        saveTasks();
+        renderTasks();
+    }
+}
+
+function deleteTask(index) {
+    if (confirm("Delete this task?")) {
+        tasks.splice(index, 1);
+        saveTasks();
+        renderTasks();
+    }
+}
+
+function toggleTask(index) {
+    tasks[index].done = !tasks[index].done;
+    saveTasks();
+    renderTasks();
+}
+
+function updateProgress() {
+    let total = tasks.length;
+    let checked = tasks.filter(task => task.done).length;
+    let percent = total === 0 ? 0 : Math.round((checked / total) * 100);
+
+    let bar = document.getElementById("progressFill");
+    bar.style.width = percent + "%";
+    bar.innerText = percent + "%";
+}
+
+function renderGuests() {
+    const table = document.getElementById("guestTable");
+    table.innerHTML = `
+        <tr>
+            <th>Name</th>
+            <th>Side</th>
+            <th>Pax</th>
+            <th>RSVP</th>
+            <th>Action</th>
+        </tr>
+    `;
+
+    guests.forEach((guest, index) => {
+        const row = table.insertRow();
+        row.innerHTML = `
+            <td><input type="text" value="${guest.name || ""}" onchange="updateGuest(${index}, 'name', this.value)"></td>
+            <td>
+                <select onchange="updateGuest(${index}, 'side', this.value)">
+                    <option value="Perempuan" ${guest.side === "Perempuan" ? "selected" : ""}>Perempuan</option>
+                    <option value="Lelaki" ${guest.side === "Lelaki" ? "selected" : ""}>Lelaki</option>
+                    <option value="Bride" ${guest.side === "Bride" ? "selected" : ""}>Bride</option>
+                    <option value="Groom" ${guest.side === "Groom" ? "selected" : ""}>Groom</option>
+                </select>
+            </td>
+            <td><input type="number" min="1" value="${guest.pax || 1}" onchange="updateGuest(${index}, 'pax', this.value)"></td>
+            <td>
+                <select onchange="updateGuest(${index}, 'rsvp', this.value)">
+                    <option value="Pending" ${guest.rsvp === "Pending" ? "selected" : ""}>Pending</option>
+                    <option value="Confirm" ${guest.rsvp === "Confirm" ? "selected" : ""}>Confirm</option>
+                    <option value="Declined" ${guest.rsvp === "Declined" ? "selected" : ""}>Declined</option>
+                </select>
+            </td>
+            <td><button class="btn-delete btn-small" onclick="deleteGuest(${index})">Delete</button></td>
+        `;
+    });
+
+    updateGuestSummary();
+}
+
+function addGuest() {
+    guests.push({
+        name: "",
+        side: "Perempuan",
+        pax: 1,
+        rsvp: "Pending"
+    });
+    saveGuests();
+    renderGuests();
+}
+
+function updateGuest(index, field, value) {
+    if (field === "pax") value = parseInt(value) || 1;
+    guests[index][field] = value;
+    saveGuests();
+    updateGuestSummary();
+}
+
+function deleteGuest(index) {
+    if (confirm("Delete this guest?")) {
+        guests.splice(index, 1);
+        saveGuests();
+        renderGuests();
+    }
+}
+
+function updateGuestSummary() {
+    let total = guests.reduce((sum, guest) => sum + (parseInt(guest.pax) || 0), 0);
+    let confirmed = guests
+        .filter(guest => guest.rsvp === "Confirm")
+        .reduce((sum, guest) => sum + (parseInt(guest.pax) || 0), 0);
+    let pending = guests
+        .filter(guest => guest.rsvp === "Pending")
+        .reduce((sum, guest) => sum + (parseInt(guest.pax) || 0), 0);
+
+    document.getElementById("guestTotal").innerText = total;
+    document.getElementById("guestConfirmed").innerText = confirmed;
+    document.getElementById("guestPending").innerText = pending;
+}
+
+function renderTimelines() {
+    const table = document.getElementById("timelineTable");
+    table.innerHTML = `
+        <tr>
+            <th>Time</th>
+            <th>Activity</th>
+            <th>Notes</th>
+            <th>Action</th>
+        </tr>
+    `;
+
+    timelines.forEach((item, index) => {
+        const row = table.insertRow();
+        row.innerHTML = `
+            <td><input type="time" value="${item.time || ""}" onchange="updateTimeline(${index}, 'time', this.value)"></td>
+            <td><input type="text" value="${item.activity || ""}" onchange="updateTimeline(${index}, 'activity', this.value)"></td>
+            <td><textarea onchange="updateTimeline(${index}, 'notes', this.value)">${item.notes || ""}</textarea></td>
+            <td><button class="btn-delete btn-small" onclick="deleteTimeline(${index})">Delete</button></td>
+        `;
+    });
+}
+
+function addTimeline() {
+    timelines.push({
+        time: "",
+        activity: "",
+        notes: ""
+    });
+    saveTimelines();
+    renderTimelines();
+}
+
+function updateTimeline(index, field, value) {
+    timelines[index][field] = value;
+    saveTimelines();
+}
+
+function deleteTimeline(index) {
+    if (confirm("Delete this timeline item?")) {
+        timelines.splice(index, 1);
+        saveTimelines();
+        renderTimelines();
+    }
+}
+
+function renderVendors() {
+    const table = document.getElementById("vendorTable");
+    table.innerHTML = `
+        <tr>
+            <th>Vendor</th>
+            <th>Category</th>
+            <th>Contact</th>
+            <th>Notes</th>
+            <th>Action</th>
+        </tr>
+    `;
+
+    vendors.forEach((vendor, index) => {
+        const row = table.insertRow();
+        row.innerHTML = `
+            <td><input type="text" value="${vendor.name || ""}" onchange="updateVendor(${index}, 'name', this.value)"></td>
+            <td><input type="text" value="${vendor.category || ""}" onchange="updateVendor(${index}, 'category', this.value)"></td>
+            <td><input type="text" value="${vendor.contact || ""}" onchange="updateVendor(${index}, 'contact', this.value)"></td>
+            <td><textarea onchange="updateVendor(${index}, 'notes', this.value)">${vendor.notes || ""}</textarea></td>
+            <td><button class="btn-delete btn-small" onclick="deleteVendor(${index})">Delete</button></td>
+        `;
+    });
+}
+
+function addVendor() {
+    vendors.push({
+        name: "",
+        category: "",
+        contact: "",
+        notes: ""
+    });
+    saveVendors();
+    renderVendors();
+}
+
+function updateVendor(index, field, value) {
+    vendors[index][field] = value;
+    saveVendors();
+}
+
+function deleteVendor(index) {
+    if (confirm("Delete this vendor?")) {
+        vendors.splice(index, 1);
+        saveVendors();
+        renderVendors();
+    }
+}
+
+renderTasks();
+renderGuests();
+renderTimelines();
+renderVendors();
+loadBudget();
+updateBudgetSummary();
 </script>
 
 </body>
