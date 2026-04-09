@@ -170,14 +170,14 @@
             <th>Actual (RM)</th>
         </tr>
         <tr>
-            <td>Pelamin</td>
-            <td><input type="number" id="budgetPelamin" oninput="saveBudget(); updateBudgetSummary();"></td>
-            <td><input type="number" id="actualPelamin" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td>Nikah Hall 50pax</td>
+            <td><input type="number" id="budgetNikah" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td><input type="number" id="actualNikah" oninput="saveBudget(); updateBudgetSummary();"></td>
         </tr>
         <tr>
-            <td>Catering</td>
-            <td><input type="number" id="budgetCatering" oninput="saveBudget(); updateBudgetSummary();"></td>
-            <td><input type="number" id="actualCatering" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td>Wedding Hall 600pax</td>
+            <td><input type="number" id="budgetHall" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td><input type="number" id="actualHall" oninput="saveBudget(); updateBudgetSummary();"></td>
         </tr>
         <tr>
             <td>MUA</td>
@@ -185,14 +185,29 @@
             <td><input type="number" id="actualMUA" oninput="saveBudget(); updateBudgetSummary();"></td>
         </tr>
         <tr>
-            <td>Doorgift</td>
-            <td><input type="number" id="budgetDoorgift" oninput="saveBudget(); updateBudgetSummary();"></td>
-            <td><input type="number" id="actualDoorgift" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td>Baju Nikah</td>
+            <td><input type="number" id="budgetBN" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td><input type="number" id="actualBN" oninput="saveBudget(); updateBudgetSummary();"></td>
+        </tr>
+        <tr>
+            <td>Baju Sanding</td>
+            <td><input type="number" id="budgetBS" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td><input type="number" id="actualBS" oninput="saveBudget(); updateBudgetSummary();"></td>
         </tr>
         <tr>
             <td>Photographer</td>
             <td><input type="number" id="budgetPhoto" oninput="saveBudget(); updateBudgetSummary();"></td>
             <td><input type="number" id="actualPhoto" oninput="saveBudget(); updateBudgetSummary();"></td>
+        </tr>
+        <tr>
+            <td>Doorgift</td>
+            <td><input type="number" id="budgetDoorgift" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td><input type="number" id="actualDoorgift" oninput="saveBudget(); updateBudgetSummary();"></td>
+        </tr>
+        <tr>
+            <td>Wedding Card Physical/Digital</td>
+            <td><input type="number" id="budgetCard" oninput="saveBudget(); updateBudgetSummary();"></td>
+            <td><input type="number" id="actualCard" oninput="saveBudget(); updateBudgetSummary();"></td>
         </tr>
     </table>
 
@@ -289,32 +304,44 @@ function saveVendors() {
 
 function saveBudget() {
     const budgetData = {
-        budgetPelamin: document.getElementById("budgetPelamin").value,
-        actualPelamin: document.getElementById("actualPelamin").value,
-        budgetCatering: document.getElementById("budgetCatering").value,
-        actualCatering: document.getElementById("actualCatering").value,
+        budgetNikah: document.getElementById("budgetNikah").value,
+        actualNikah: document.getElementById("actualNikah").value,
+        budgetHall: document.getElementById("budgetHall").value,
+        actualHall: document.getElementById("actualHall").value,
         budgetMUA: document.getElementById("budgetMUA").value,
         actualMUA: document.getElementById("actualMUA").value,
+        budgetBN: document.getElementById("budgetBN").value,
+        actualBN: document.getElementById("actualBN").value,
+        budgetBS: document.getElementById("budgetBS").value,
+        actualBS: document.getElementById("actualBS").value,
         budgetDoorgift: document.getElementById("budgetDoorgift").value,
         actualDoorgift: document.getElementById("actualDoorgift").value,
         budgetPhoto: document.getElementById("budgetPhoto").value,
-        actualPhoto: document.getElementById("actualPhoto").value
+        actualPhoto: document.getElementById("actualPhoto").value,
+        budgetCard: document.getElementById("budgetCard").value,
+        actualCard: document.getElementById("actualCard").value
     };
     localStorage.setItem("weddingBudget", JSON.stringify(budgetData));
 }
 
 function loadBudget() {
     const budgetData = JSON.parse(localStorage.getItem("weddingBudget")) || {};
-    document.getElementById("budgetPelamin").value = budgetData.budgetPelamin || "";
-    document.getElementById("actualPelamin").value = budgetData.actualPelamin || "";
-    document.getElementById("budgetCatering").value = budgetData.budgetCatering || "";
-    document.getElementById("actualCatering").value = budgetData.actualCatering || "";
+    document.getElementById("budgetNikah").value = budgetData.budgetNikah || "";
+    document.getElementById("actualNikah").value = budgetData.actualNikah || "";
+    document.getElementById("budgetHall").value = budgetData.budgetHall || "";
+    document.getElementById("actualHall").value = budgetData.actualHall || "";
     document.getElementById("budgetMUA").value = budgetData.budgetMUA || "";
     document.getElementById("actualMUA").value = budgetData.actualMUA || "";
+    document.getElementById("budgetBN").value = budgetData.budgetBN || "";
+    document.getElementById("actualBN").value = budgetData.actualBN || "";
+    document.getElementById("budgetBS").value = budgetData.budgetBS || "";
+    document.getElementById("actualBS").value = budgetData.actualBS || "";
     document.getElementById("budgetDoorgift").value = budgetData.budgetDoorgift || "";
     document.getElementById("actualDoorgift").value = budgetData.actualDoorgift || "";
     document.getElementById("budgetPhoto").value = budgetData.budgetPhoto || "";
     document.getElementById("actualPhoto").value = budgetData.actualPhoto || "";
+    document.getElementById("budgetCard").value = budgetData.budgetCard || "";
+    document.getElementById("actualCard").value = budgetData.actualCard || "";
 }
 
 function numVal(id) {
@@ -323,18 +350,24 @@ function numVal(id) {
 
 function updateBudgetSummary() {
     const totalBudget =
-        numVal("budgetPelamin") +
-        numVal("budgetCatering") +
+        numVal("budgetNikah") +
+        numVal("budgetHall") +
         numVal("budgetMUA") +
+        numVal("budgetBN") +
+        numVal("budgetBS") +
         numVal("budgetDoorgift") +
-        numVal("budgetPhoto");
+        numVal("budgetPhoto") +
+        numVal("budgetCard");
 
     const totalActual =
-        numVal("actualPelamin") +
-        numVal("actualCatering") +
+        numVal("actualNikah") +
+        numVal("actualHall") +
         numVal("actualMUA") +
+        numVal("actualBN") +
+        numVal("actualBS") +
         numVal("actualDoorgift") +
-        numVal("actualPhoto");
+        numVal("actualPhoto") +
+        numVal("actualCard");
 
     const diff = totalBudget - totalActual;
 
